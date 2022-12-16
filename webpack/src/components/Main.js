@@ -1,4 +1,6 @@
 import React from "react";
+import ContactApp from "./UseState/ContactApp";
+import LotteryApp from "./UseState/LotteryApp";
 import Register from "./UseState/Register";
 
 const handleShowPass = () => {
@@ -13,7 +15,9 @@ const handleShowPass = () => {
 function Main(){
     return (
         <div className="container vh-100">
-        <Register></Register>
+        {/* <Register></Register> */}
+        {/* <ContactApp></ContactApp> */}
+        <LotteryApp></LotteryApp>
         </div>
     )
 }

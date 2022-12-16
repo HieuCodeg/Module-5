@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-const provinces = [
-    {
-        provinceId: 1,
-        name: "TT Huế"
-    },
-    {
-        provinceId: 2,
-        name: "Đà Nẵng"
-    },
-    {
-        provinceId: 3,
-        name: "Quảng Trị"
-    },
-]
+// const provinces = [
+//     {
+//         province_id: 1,
+//         province_name: "TT Huế"
+//     },
+//     {
+//         province_id: 2,
+//         province_name: "Đà Nẵng"
+//     },
+//     {
+//         province_id: 3,
+//         province_name: "Quảng Trị"
+//     },
+// ]
 
 const genders = [
     {
@@ -53,16 +53,19 @@ const hobbiesList = [
 
 // function getProvince(){
 //     fetch("https://vapi.vnappmob.com/api/province/")
-//     .then(function (res) {
-//         console.log(res);
-//         return res.result;
-//     })
+//         .then(function (res) {
+           
+//             return res.json();
+//         })
+//         .then(function (posts) {
+//             console.log(posts);
+//             return posts.results;
+//         })
 // };
 
 
-
-
 function Register() {
+    
     
     const [state, setState] = useState({
         fullname: "",
@@ -175,8 +178,8 @@ function Register() {
                     >
                         {
                             provinces.map((province) => (
-                                <option value={province.name}
-                                    key={province.provinceId}>{province.name}</option>
+                                <option value={province.province_name}
+                                    key={province.province_id}>{province.province_name}</option>
                             ))
                         }
                     </select>
