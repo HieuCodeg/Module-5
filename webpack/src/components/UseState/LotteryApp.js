@@ -1,27 +1,50 @@
 import React, { useState } from "react";
-const lotteries = [
-    "00001",
-    "00002",
-    "00003",
-    "00004",
-    "00005",
-    "00006"
-]
+
 
 function LotteryApp(){
     const [state, setState] = useState({
-        special: "",
-        first: "",
-        secondOne: "",
-        secondTwo: "",
-        thirdOne: "",
-        thirdTwo: "",
-        thirdThree: ""
+        special: "ĐẶC BIỆT",
+        first: "NHẤT",
+        secondOne: "NHÌ 1",
+        secondTwo: "NHÌ 2",
+        thirdOne: "BA 1",
+        thirdTwo: "BA 2",
+        thirdThree: "BA 3"
     })
+    const lotteries = [];
 
     const handleInput = (e) => {
-        let index = Math.floor(Math.random() * lotteries.length);
-        let value = lotteries[index];
+        let value;
+        if (e.target.name == "special" || e.target.name == "first" ) {
+            value = Math.floor((Math.random() * 99999) + 1 );
+                while (lotteries.includes(value)) {
+                    value = Math.floor((Math.random() * 99999) + 1 );
+                }
+                lotteries.push(value);
+                while (value.toString().length < 5) {
+                    value = 0 + value.toString();
+                }
+        }
+        if (e.target.name == "secondOne" || e.target.name == "secondTwo" ) {
+            value = Math.floor((Math.random() * 9999) + 1 );
+                while (lotteries.includes(value)) {
+                    value = Math.floor((Math.random() * 9999) + 1 );
+                }
+                lotteries.push(value);
+                while (value.toString().length < 4) {
+                    value = 0 + value.toString();
+                }
+        }
+        if (e.target.name == "thirdOne" || e.target.name == "thirdTwo" || e.target.name == "thirdThree" ) {
+            value = Math.floor((Math.random() * 999) + 1 );
+                while (lotteries.includes(value)) {
+                    value = Math.floor((Math.random() * 999) + 1 );
+                }
+                lotteries.push(value);
+                while (value.toString().length < 3) {
+                    value = 0 + value.toString();
+                }
+        }   
         
         setState({
             ...state,
@@ -49,13 +72,13 @@ function LotteryApp(){
             <h1>Xổ số Codegym</h1>
             <div className="w-75 my-2 d-flex align-items-center" >
                 <button style= {{width: "200px"}} type="button" 
-                    className="btn btn-success me-4"
+                    className="btn btn-danger me-4"
                     onClick={handleInput}
                     name = "special"
                 >
                 Giải đặc biệt</button>
                 <input 
-                    type="text" className="form-control text-center" 
+                    type="text" className="form-control text-center text-danger fw-bold" 
                     value={special}
                     
                     readOnly
@@ -63,13 +86,13 @@ function LotteryApp(){
             </div>
             <div className="w-75 my-2 d-flex align-items-center" >
                 <button style= {{width: "200px"}} type="button" 
-                    className="btn btn-success me-4"
+                    className="btn btn-warning me-4"
                     onClick={handleInput}
                     name = "first"
                 >
                 Giải nhất</button>
                 <input 
-                    type="text" className="form-control text-center"
+                    type="text" className="form-control text-center text-warning fw-bold"
                     value={first}
                     readOnly   
                 />
@@ -83,12 +106,12 @@ function LotteryApp(){
                 >
                 Giải nhì</button>
                 <input 
-                    type="text" className="form-control me-2 text-center"  
+                    type="text" className="form-control me-2 text-center text-success fw-bold"  
                     readOnly 
                     value={secondOne}   
                 />
                 <input 
-                    type="text" className="form-control text-center" 
+                    type="text" className="form-control text-center text-success fw-bold" 
                     readOnly
                     value={secondTwo}     
                 />
@@ -96,23 +119,23 @@ function LotteryApp(){
             <div className="w-75 my-2 d-flex align-items-center" >
                 <button style= {{width: "200px"}} 
                     type="button" 
-                    className="btn btn-success me-4 "
+                    className="btn btn-primary me-4 "
                     onClick={handleInput}
                     name = "thirdOne"
                 >
                 Giải ba</button>
                 <input 
-                    type="text" className="form-control me-2 text-center" 
+                    type="text" className="form-control me-2 text-center text-primary fw-bold" 
                     readOnly 
                     value={thirdOne}      
                 />
                 <input 
-                    type="text" className="form-control me-2 text-center"   
+                    type="text" className="form-control me-2 text-center text-primary fw-bold"   
                     readOnly    
                     value={thirdTwo} 
                 />
                 <input 
-                    type="text" className="form-control text-center"      
+                    type="text" className="form-control text-center text-primary fw-bold"      
                     readOnly
                     value={thirdThree} 
                 />
