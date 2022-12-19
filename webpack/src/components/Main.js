@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import Blog from "./UseEffect/Blog";
 import ContactApp from "./UseState/ContactApp";
 import LotteryApp from "./UseState/LotteryApp";
 import Register from "./UseState/Register";
+import Test from "./UseEffect/Test";
 
 const handleShowPass = () => {
     if (document.getElementById('inputPassWord').type == 'password') {
@@ -13,11 +15,24 @@ const handleShowPass = () => {
 }
 
 function Main(){
+    const [state, setState] = useState(false);
+    const handleClick = () => {
+        setState(!state)
+    }
+
     return (
-        <div className="container vh-100">
-        {/* <Register></Register> */}
+        <div className="container">
+        <Register></Register>
+        {/* <Test></Test> */}
         {/* <ContactApp></ContactApp> */}
-        <LotteryApp></LotteryApp>
+        {/* <LotteryApp></LotteryApp> */}
+        {/* <button
+            className="btn btn-dark mb-2"
+            onClick={handleClick}
+        >Toggle</button>
+        {
+            state && <Blog></Blog>
+        } */}
         </div>
     )
 }

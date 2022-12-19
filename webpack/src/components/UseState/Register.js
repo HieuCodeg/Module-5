@@ -1,19 +1,5 @@
-import React, { useState } from "react";
-
-// const provinces = [
-//     {
-//         province_id: 1,
-//         province_name: "TT Huế"
-//     },
-//     {
-//         province_id: 2,
-//         province_name: "Đà Nẵng"
-//     },
-//     {
-//         province_id: 3,
-//         province_name: "Quảng Trị"
-//     },
-// ]
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const genders = [
     {
@@ -49,41 +35,130 @@ const hobbiesList = [
     }
 ]
 
-// const provinces = getProvince();
-
-// function getProvince(){
-//     fetch("https://vapi.vnappmob.com/api/province/")
-//         .then(function (res) {
-           
-//             return res.json();
-//         })
-//         .then(function (posts) {
-//             console.log(posts);
-//             return posts.results;
-//         })
-// };
-
-
 function Register() {
-    
-    
+
     const [state, setState] = useState({
         fullname: "",
         email: "",
         gender: 1,
-        province: provinces[0].name,
+        province: "01",
+        district: "271",
+        ward: "09619",
         hobbies: []
     })
+    const [address, setAddress] = useState({
+        provinces: [],
+        districts: [],
+        wards: []
+    })
+    // useEffect( () => {
+    //     fetch("https://vapi.vnappmob.com/api/province/")
+    //     .then( (res) => res.json())
+    //     .then((posts) => {
+    //         setAddress({
+    //             ...address,
+    //             provinces: posts.results
+    //         })
+    //     })
+    // }, [])
+
+    useEffect( () => {
+        async function getData() {
+            let resProvinces = await axios.get("https://vapi.vnappmob.com/api/province/");
+            let resDistricts = await axios.get(`https://vapi.vnappmob.com/api/province/district/${province}`);
+            let resWards = await axios.get(`https://vapi.vnappmob.com/api/province/ward/${district}`);
+            setAddress({
+                ...address,
+                provinces: resProvinces.data.results,
+                districts: resDistricts.data.results,
+                wards: resWards.data.results
+            })
+        }
+
+        getData();
+        return () => {
+            console.log('unmouted');
+        }
+        
+    },[])
+
+    const handleInputProvince = ( value) => {
+        async function changeData() {
+            let resDistricts = await axios.get(`https://vapi.vnappmob.com/api/province/district/${value}`);
+            let resWards = await axios.get(`https://vapi.vnappmob.com/api/province/ward/${resDistricts.data.results[0].district_id}`);
+            setAddress({
+                ...address,
+                districts: resDistricts.data.results,
+                wards: resWards.data.results
+            });
+            setState({
+                ...state,
+                province : value,
+                district: resDistricts.data.results[0].district_id,
+                ward: resWards.data.results[0].ward_id
+            });
+            
+        }
+        changeData();
+    }
+
+    const handleInputDistrict = (value) => {
+        async function changeData() {
+            let resWards = await axios.get(`https://vapi.vnappmob.com/api/province/ward/${value}`);
+            setAddress({
+                ...address,
+                wards: resWards.data.results
+            });
+            setState({
+                ...state,
+                district : value,
+                ward: wards[0].ward_id
+            })
+        }
+        changeData();
+    }
+
+    const handleResetForm = () => {
+        async function changeData() {
+            let resDistricts = await axios.get(`https://vapi.vnappmob.com/api/province/district/01`);
+            let resWards = await axios.get(`https://vapi.vnappmob.com/api/province/ward/${resDistricts.data.results[0].district_id}`);
+            setAddress({
+                ...address,
+                districts: resDistricts.data.results,
+                wards: resWards.data.results
+            });
+            setState({
+                ...state,
+                email: "",
+                fullname: "",
+                province: "01",
+                district: "271",
+                ward: "09619",
+                hobbies: []
+            })
+            
+        }
+        changeData();
+    }
 
     const handleInput = (e) => {
-        setState({
-            ...state,
-            [e.target.name] : e.target.value
-        })
+        if (e.target.name === 'province') {
+        
+            handleInputProvince(e.target.value)
+                    
+        } else if (e.target.name === 'district') {
+            handleInputDistrict(e.target.value)
+        } else {
+            setState({
+                ...state,
+                [e.target.name] : e.target.value,
+            })
+        }
+        
     }
 
     const handleCheck = (id) => {
-        const tamp = [...hobbies];
+        let tamp = [...hobbies];
         const isChecked = hobbies.includes(id)
         if (isChecked) {
             tamp = hobbies.filter(item => item !== id)
@@ -99,17 +174,11 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(state);
-        setState({
-            ...state,
-            email: "",
-            fullname: "",
-            gender: 1,
-            province: provinces[0].name,
-            hobbies: []
-        })
+        handleResetForm();
     }
 
-    const { email, fullname, province, gender, hobbies } = state;
+    const { email, fullname, province, gender, hobbies, district, ward } = state;
+    const { provinces, districts, wards } = address;
 
     return (
         <div className="container">
@@ -170,7 +239,7 @@ function Register() {
                 </div>
                 
                 <div className="form-group">
-                    <label className="form-label">Provinces</label>
+                    <label className="form-label">Province</label>
                     <select className="form-control form-select"
                         name="province"
                         value={province}
@@ -178,14 +247,45 @@ function Register() {
                     >
                         {
                             provinces.map((province) => (
-                                <option value={province.province_name}
+                                <option value={province.province_id}
                                     key={province.province_id}>{province.province_name}</option>
                             ))
                         }
                     </select>
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="btn btn-danger mt-2">Register</button>
+                    <label className="form-label">District</label>
+                    <select className="form-control form-select"
+                        name="district"
+                        value={district}
+                        onInput={handleInput}
+                    >
+                        {
+                            districts.map((item) => (
+                                <option value={item.district_id}
+                                    key={item.district_id}>{item.district_name}</option>
+                            ))
+                        }
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label className="form-label">Ward</label>
+                    <select className="form-control form-select"
+                        name="ward"
+                        value={ward}
+                        onInput={handleInput}
+                    >
+                        {
+                            wards.map((item) => (
+                                <option value={item.ward_id}
+                                    key={item.ward_id}>{item.ward_name}</option>
+                            ))
+                        }
+                    </select>
+                </div>
+                
+                <div className="form-group">
+                    <button type="submit" className="btn btn-danger my-4">Register</button>
                 </div>
             </form>
     </div>
