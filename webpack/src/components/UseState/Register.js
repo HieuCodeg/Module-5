@@ -77,7 +77,7 @@ function Register() {
 
         getData();
         return () => {
-            console.log('unmouted');
+            
         }
         
     },[])
@@ -182,6 +182,7 @@ function Register() {
 
     return (
         <div className="container">
+            <h2>Form đăng  ký</h2>
         <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label className="form-label">Fullname</label>

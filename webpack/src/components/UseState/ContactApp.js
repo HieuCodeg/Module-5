@@ -35,7 +35,7 @@ function ContactApp(){
         })
     }
     return (
-        <div className="container">
+        <div className="container vh-100">
             <h1>Contact App</h1>
             <div className="w-25 my-2">
                 <form onSubmit={handleSubmit} className="d-flex align-items-center">

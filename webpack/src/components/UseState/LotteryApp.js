@@ -68,7 +68,7 @@ function LotteryApp(){
     const { special, first, secondOne, secondTwo, thirdOne, thirdTwo, thirdThree } = state;
 
     return (
-        <div className="container">
+        <div className="container vh-100">
             <h1>Xổ số Codegym</h1>
             <div className="w-75 my-2 d-flex align-items-center" >
                 <button style= {{width: "200px"}} type="button" 
